@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sfsw_lab_1_spring/design_system/theme.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
@@ -14,8 +15,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      home: const Scaffold(
         body: Center(
           child: Text('Hello World!'),
         ),
