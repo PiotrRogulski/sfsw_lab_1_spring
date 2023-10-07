@@ -2,7 +2,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
-const _seedColor = Color(0xFFF35F51);
+const _seedColor = Color(0xFF00FF8C);
 
 class AppTheme {
   static ThemeData get light => _makeTheme(Brightness.light);
