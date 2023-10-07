@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameters_store.dart';
+import 'package:sfsw_lab_1_spring/features/settings/settings_store.dart';
 
 class AppProviders extends StatelessWidget {
   const AppProviders({
@@ -16,6 +19,14 @@ class AppProviders extends StatelessWidget {
       providers: [
         Provider(
           create: (context) => ParametersStore(),
+        ),
+        Provider(
+          create: (context) => SettingsStore(
+            themeMode: PlatformDispatcher.instance.platformBrightness ==
+                    Brightness.dark
+                ? ThemeMode.dark
+                : ThemeMode.light,
+          ),
         ),
       ],
       child: child,
