@@ -17,7 +17,7 @@ class LayoutLarge extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(
-            width: 200,
+            width: 250,
             child: SlotDecoration(child: ParametersForm()),
           ),
           Expanded(

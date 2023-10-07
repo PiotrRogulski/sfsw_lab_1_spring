@@ -17,7 +17,7 @@ class LayoutMedium extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.all(16),
           child: SizedBox(
-            width: 200,
+            width: 250,
             child: SlotDecoration(child: ParametersForm()),
           ),
         ),

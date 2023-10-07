@@ -24,18 +24,39 @@ class App extends StatelessWidget {
         ),
         body: BreakpointSelector(
           builders: {
-            Breakpoints.large: (context) => const LayoutLarge(
+            AppBreakpoint.large: (context) => const LayoutLarge(
                   key: PageStorageKey('layout_large'),
                 ),
-            Breakpoints.medium: (context) => const LayoutMedium(
+            AppBreakpoint.medium: (context) => const LayoutMedium(
                   key: PageStorageKey('layout_medium'),
                 ),
-            Breakpoints.small: (context) => const LayoutSmall(
+            AppBreakpoint.small: (context) => const LayoutSmall(
                   key: PageStorageKey('layout_small'),
                 ),
           },
         ),
       ),
     );
+  }
+}
+
+enum AppBreakpoint implements Breakpoint {
+  small(end: 700),
+  medium(begin: 700, end: 1200),
+  large(begin: 1200);
+
+  const AppBreakpoint({
+    this.begin = double.negativeInfinity,
+    this.end = double.infinity,
+  });
+
+  final double begin;
+  final double end;
+
+  @override
+  bool isActive(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+
+    return width >= begin && width < end;
   }
 }
