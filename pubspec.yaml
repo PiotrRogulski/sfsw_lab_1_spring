@@ -8,6 +8,7 @@ environment:
   flutter: 3.13.4
 
 dependencies:
+  boxy: ^2.1.1
   collection: ^1.18.0
   dynamic_color: ^1.6.7
   flutter:

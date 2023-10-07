@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  boxy:
+    dependency: "direct main"
+    description:
+      name: boxy
+      sha256: c175c31569152a4751979555c869e054c4fd42552dbdf0d2342a2f7ddb6d0a56
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   build:
     dependency: transitive
     description:

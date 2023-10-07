@@ -16,6 +16,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
+      // TODO: add a switch
+      themeMode: ThemeMode.light,
       home: Scaffold(
         appBar: AppBar(
           elevation: 3,
