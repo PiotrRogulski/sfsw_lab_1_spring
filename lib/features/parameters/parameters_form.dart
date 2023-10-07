@@ -37,6 +37,14 @@ class ParametersForm extends LayoutSlot {
             label: 'm',
             parameter: parameters.mass,
           ),
+          _ParameterEntry(
+            label: 'k',
+            parameter: parameters.dampingConstant,
+          ),
+          _ParameterEntry(
+            label: 'c',
+            parameter: parameters.springConstant,
+          ),
         ],
       ),
     );
