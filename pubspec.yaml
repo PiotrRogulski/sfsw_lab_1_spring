@@ -8,9 +8,11 @@ environment:
   flutter: 3.13.4
 
 dependencies:
+  collection: ^1.18.0
   dynamic_color: ^1.6.7
   flutter:
     sdk: flutter
+  flutter_adaptive_scaffold: ^0.1.7+1
   flutter_hooks: ^0.20.2
   flutter_mobx: ^2.1.0
   material_color_utilities: ^0.8.0
@@ -26,6 +28,7 @@ dev_dependencies:
   mobx_codegen: ^2.4.0
 
 dependency_overrides:
+  collection: ^1.18.0
   material_color_utilities: ^0.8.0
 
 flutter:
