@@ -23,6 +23,19 @@ class AppTheme {
         ),
         shadowColor: Colors.transparent,
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 10,
+        ),
+        errorStyle: const TextStyle(
+          fontSize: 0,
+        ),
+      ),
     );
   }
 
