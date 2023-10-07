@@ -5,11 +5,23 @@ import 'package:sfsw_lab_1_spring/design_system/theme.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_large.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_medium.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_small.dart';
+import 'package:sfsw_lab_1_spring/providers.dart';
 
 class App extends StatelessWidget {
   const App({
     super.key,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return const AppProviders(
+      child: _App(),
+    );
+  }
+}
+
+class _App extends StatelessWidget {
+  const _App();
 
   @override
   Widget build(BuildContext context) {
