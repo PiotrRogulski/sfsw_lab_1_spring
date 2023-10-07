@@ -14,6 +14,7 @@ class ParametersStore {
   final timeDelta = ParameterStore(
     bounds: const (min: 0.001, max: 0.1),
     initialValue: 0.01,
+    precision: 3,
   );
 
   final mass = ParameterStore(

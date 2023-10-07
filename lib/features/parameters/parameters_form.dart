@@ -22,6 +22,18 @@ class ParametersForm extends LayoutSlot {
       child: Column(
         children: [
           _ParameterEntry(
+            label: 'x₀',
+            parameter: parameters.initialPosition,
+          ),
+          _ParameterEntry(
+            label: 'v₀',
+            parameter: parameters.initialVelocity,
+          ),
+          _ParameterEntry(
+            label: 'Δt',
+            parameter: parameters.timeDelta,
+          ),
+          _ParameterEntry(
             label: 'm',
             parameter: parameters.mass,
           ),
@@ -42,12 +54,15 @@ class _ParameterEntry extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller =
-        useTextEditingController(text: parameter.value.toStringAsFixed(2));
+    final ParameterStore(:precision, :bounds) = parameter;
+
+    final controller = useTextEditingController(
+      text: parameter.value.toStringAsFixed(precision),
+    );
 
     useReaction(
       () => parameter.value,
-      (value) => controller.text = value.toStringAsFixed(2),
+      (value) => controller.text = value.toStringAsFixed(precision),
     );
 
     return Observer(
@@ -80,8 +95,7 @@ class _ParameterEntry extends HookWidget {
                     return '';
                   }
                   final parsed = double.parse(value);
-                  if (parsed < parameter.bounds.min ||
-                      parsed > parameter.bounds.max) {
+                  if (parsed < bounds.min || parsed > bounds.max) {
                     return '';
                   }
                   return null;
@@ -97,8 +111,8 @@ class _ParameterEntry extends HookWidget {
               child: Slider(
                 value: parameter.value,
                 onChanged: (value) => parameter.value = value,
-                min: parameter.bounds.min,
-                max: parameter.bounds.max,
+                min: bounds.min,
+                max: bounds.max,
                 inactiveColor: Theme.of(context).colorScheme.surface,
               ),
             ),
