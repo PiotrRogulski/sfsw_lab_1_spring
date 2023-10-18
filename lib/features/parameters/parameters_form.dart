@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sfsw_lab_1_spring/common/hooks/use_reaction.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameter_store.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameters_store.dart';
+import 'package:sfsw_lab_1_spring/features/simulation/spring_simulation_store.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_slot.dart';
 
 class ParametersForm extends LayoutSlot {
@@ -17,6 +18,7 @@ class ParametersForm extends LayoutSlot {
   @override
   Widget build(BuildContext context) {
     final parameters = context.read<ParametersStore>();
+    final simulation = context.read<SpringSimulationStore>();
 
     return SingleChildScrollView(
       child: Column(
@@ -44,6 +46,19 @@ class ParametersForm extends LayoutSlot {
           _ParameterEntry(
             label: 'c',
             parameter: parameters.springConstant,
+          ),
+          Observer(
+            builder: (context) {
+              return switch (simulation.readings) {
+                [..., final reading] => Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      '${simulation.readings.length} Observed at ${reading.timestamp}',
+                    ),
+                  ),
+                [] => const SizedBox(),
+              };
+            },
           ),
         ],
       ),

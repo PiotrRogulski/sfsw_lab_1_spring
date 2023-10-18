@@ -8,6 +8,7 @@ abstract class _ParameterStoreBase with Store {
   _ParameterStoreBase({
     required this.bounds,
     required double initialValue,
+    // ignore: unused_element
     this.precision = 2,
   }) : value = initialValue;
 

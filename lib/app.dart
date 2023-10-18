@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sfsw_lab_1_spring/common/widgets/breakpoint_selector.dart';
 import 'package:sfsw_lab_1_spring/design_system/theme.dart';
 import 'package:sfsw_lab_1_spring/features/settings/settings_store.dart';
+import 'package:sfsw_lab_1_spring/features/simulation/spring_simulation_store.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_large.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_medium.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_small.dart';
@@ -29,6 +30,7 @@ class _App extends StatelessObserverWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.read<SettingsStore>();
+    final simulation = context.read<SpringSimulationStore>();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -38,6 +40,22 @@ class _App extends StatelessObserverWidget {
       home: Scaffold(
         appBar: AppBar(
           elevation: 3,
+          title: Row(
+            children: [
+              IconButton.filledTonal(
+                onPressed: simulation.status == SimulationStatus.running
+                    ? null
+                    : simulation.startSimulation,
+                icon: const Icon(Icons.play_arrow),
+              ),
+              IconButton(
+                onPressed: simulation.status == SimulationStatus.running
+                    ? simulation.stopSimulation
+                    : null,
+                icon: const Icon(Icons.stop),
+              ),
+            ],
+          ),
           actions: [
             IconButton(
               onPressed: () {
