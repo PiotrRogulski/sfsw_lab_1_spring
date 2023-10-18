@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -24,7 +25,7 @@ class App extends StatelessWidget {
   }
 }
 
-class _App extends StatelessObserverWidget {
+class _App extends StatelessWidget {
   const _App();
 
   @override
@@ -32,59 +33,68 @@ class _App extends StatelessObserverWidget {
     final settings = context.read<SettingsStore>();
     final simulation = context.read<SpringSimulationStore>();
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: settings.themeMode,
-      home: Scaffold(
-        appBar: AppBar(
-          elevation: 3,
-          title: Row(
-            children: [
-              IconButton.filledTonal(
-                onPressed: simulation.status == SimulationStatus.running
-                    ? null
-                    : simulation.startSimulation,
-                icon: const Icon(Icons.play_arrow),
-              ),
-              IconButton(
-                onPressed: simulation.status == SimulationStatus.running
-                    ? simulation.stopSimulation
-                    : null,
-                icon: const Icon(Icons.stop),
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                settings.themeMode = settings.themeMode == ThemeMode.light
-                    ? ThemeMode.dark
-                    : ThemeMode.light;
-              },
-              icon: Icon(
-                settings.themeMode == ThemeMode.light
-                    ? Icons.dark_mode
-                    : Icons.light_mode,
-              ),
-            ),
-          ],
-        ),
-        body: BreakpointSelector(
-          builders: {
-            AppBreakpoint.large: (context) => const LayoutLarge(
-                  key: PageStorageKey('layout_large'),
+    return DynamicColorBuilder(
+      builder: (lightScheme, darkScheme) {
+        return Observer(
+          builder: (context) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: AppTheme.light(lightScheme),
+              darkTheme: AppTheme.dark(darkScheme),
+              themeMode: settings.themeMode,
+              home: Scaffold(
+                appBar: AppBar(
+                  elevation: 3,
+                  title: Row(
+                    children: [
+                      IconButton.filledTonal(
+                        onPressed: simulation.status == SimulationStatus.running
+                            ? null
+                            : simulation.startSimulation,
+                        icon: const Icon(Icons.play_arrow),
+                      ),
+                      IconButton(
+                        onPressed: simulation.status == SimulationStatus.running
+                            ? simulation.stopSimulation
+                            : null,
+                        icon: const Icon(Icons.stop),
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        settings.themeMode =
+                            settings.themeMode == ThemeMode.light
+                                ? ThemeMode.dark
+                                : ThemeMode.light;
+                      },
+                      icon: Icon(
+                        settings.themeMode == ThemeMode.light
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
+                      ),
+                    ),
+                  ],
                 ),
-            AppBreakpoint.medium: (context) => const LayoutMedium(
-                  key: PageStorageKey('layout_medium'),
+                body: BreakpointSelector(
+                  builders: {
+                    AppBreakpoint.large: (context) => const LayoutLarge(
+                          key: PageStorageKey('layout_large'),
+                        ),
+                    AppBreakpoint.medium: (context) => const LayoutMedium(
+                          key: PageStorageKey('layout_medium'),
+                        ),
+                    AppBreakpoint.small: (context) => const LayoutSmall(
+                          key: PageStorageKey('layout_small'),
+                        ),
+                  },
                 ),
-            AppBreakpoint.small: (context) => const LayoutSmall(
-                  key: PageStorageKey('layout_small'),
-                ),
+              ),
+            );
           },
-        ),
-      ),
+        );
+      },
     );
   }
 }
