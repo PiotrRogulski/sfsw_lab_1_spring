@@ -90,6 +90,9 @@ class _ParameterEntry extends HookWidget {
 
     return Observer(
       builder: (context) {
+        final enabled = context.read<SpringSimulationStore>().status !=
+            SimulationStatus.running;
+
         return Row(
           children: [
             const SizedBox(width: 8),
@@ -105,6 +108,7 @@ class _ParameterEntry extends HookWidget {
             SizedBox(
               width: 64,
               child: TextFormField(
+                enabled: enabled,
                 controller: controller,
                 onFieldSubmitted: (value) {
                   final parsed = double.tryParse(value);
@@ -133,7 +137,7 @@ class _ParameterEntry extends HookWidget {
             Expanded(
               child: Slider(
                 value: parameter.value,
-                onChanged: (value) => parameter.value = value,
+                onChanged: enabled ? (value) => parameter.value = value : null,
                 min: bounds.min,
                 max: bounds.max,
                 inactiveColor: Theme.of(context).colorScheme.surface,
