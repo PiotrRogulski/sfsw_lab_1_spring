@@ -88,6 +88,18 @@ class _ParameterEntry extends HookWidget {
       (value) => controller.text = value.toStringAsFixed(precision),
     );
 
+    // ignore: avoid_types_on_closure_parameters
+    final validator = useCallback((String? value) {
+      if (value == null || double.tryParse(value) == null) {
+        return '';
+      }
+      final parsed = double.parse(value);
+      if (parsed < bounds.min || parsed > bounds.max) {
+        return '';
+      }
+      return null;
+    });
+
     return Observer(
       builder: (context) {
         final enabled = context.read<SpringSimulationStore>().status !=
@@ -112,21 +124,15 @@ class _ParameterEntry extends HookWidget {
                 controller: controller,
                 onFieldSubmitted: (value) {
                   final parsed = double.tryParse(value);
-                  if (parsed != null) {
+                  if (parsed != null && validator(value) == null) {
                     parameter.value = parsed;
+                  } else {
+                    controller.text =
+                        parameter.value.toStringAsFixed(precision);
                   }
                 },
                 autovalidateMode: AutovalidateMode.always,
-                validator: (value) {
-                  if (value == null || double.tryParse(value) == null) {
-                    return '';
-                  }
-                  final parsed = double.parse(value);
-                  if (parsed < bounds.min || parsed > bounds.max) {
-                    return '';
-                  }
-                  return null;
-                },
+                validator: validator,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
                 ],
