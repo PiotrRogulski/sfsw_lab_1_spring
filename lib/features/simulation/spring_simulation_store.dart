@@ -33,6 +33,7 @@ abstract class _SpringSimulationStoreBase with Store {
   @action
   Future<void> startSimulation() async {
     _status = SimulationStatus.starting;
+    readings.clear();
     final isolateToMainPort = ReceivePort();
 
     _isolateToMainStreamSub = isolateToMainPort.listen((data) {
