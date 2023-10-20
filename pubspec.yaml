@@ -12,6 +12,7 @@ dependencies:
   collection: ^1.18.0
   dynamic_color: ^1.6.7
   equatable: ^2.0.5
+  fl_chart: ^0.64.0
   flutter:
     sdk: flutter
   flutter_adaptive_scaffold: ^0.1.7+1
