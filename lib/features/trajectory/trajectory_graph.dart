@@ -102,6 +102,25 @@ class TrajectoryGraph extends LayoutSlot {
                   ),
                 ],
               ),
+              borderData: FlBorderData(
+                border: Border.all(color: colors.outline),
+              ),
+              gridData: FlGridData(
+                getDrawingHorizontalLine: (value) {
+                  return FlLine(
+                    color: colors.outline,
+                    strokeWidth: 0.4,
+                    dashArray: [8, 4],
+                  );
+                },
+                getDrawingVerticalLine: (value) {
+                  return FlLine(
+                    color: colors.outline,
+                    strokeWidth: 0.4,
+                    dashArray: [8, 4],
+                  );
+                },
+              ),
             ),
           ),
         );
