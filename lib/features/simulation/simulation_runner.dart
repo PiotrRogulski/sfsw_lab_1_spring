@@ -25,13 +25,17 @@ Future<void> _runSimulation((SendPort, Parameters) args) async {
   double acceleration(double t) => totalForce(t) / mass;
 
   final beginningTime = DateTime.now();
+  var lastTimestamp = beginningTime;
   Timer.periodic(Duration(milliseconds: timeDelta * 1000 ~/ 1), (_) {
-    final timestamp = DateTime.now().difference(beginningTime);
+    final now = DateTime.now();
+    final timestamp = now.difference(beginningTime);
     final t = timestamp.inMicroseconds / Duration.microsecondsPerMillisecond;
+    final dt = now.difference(lastTimestamp).inMicroseconds /
+        Duration.microsecondsPerSecond;
 
     final currAcceleration = acceleration(t);
 
-    final newY = y + Vector2(y[1], currAcceleration) * timeDelta;
+    final newY = y + Vector2(y[1], currAcceleration) * dt;
 
     port.send(
       Observation(
@@ -46,5 +50,6 @@ Future<void> _runSimulation((SendPort, Parameters) args) async {
     );
 
     y = newY;
+    lastTimestamp = now;
   });
 }
