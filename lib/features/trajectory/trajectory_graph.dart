@@ -14,6 +14,26 @@ class TrajectoryGraph extends LayoutSlot {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.hasBoundedHeight) {
+          return const _TrajectoryGraph();
+        } else {
+          return const AspectRatio(
+            aspectRatio: 1,
+            child: _TrajectoryGraph(),
+          );
+        }
+      },
+    );
+  }
+}
+
+class _TrajectoryGraph extends StatelessWidget {
+  const _TrajectoryGraph();
+
+  @override
+  Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
     final simulationStore = context.read<SpringSimulationStore>();
