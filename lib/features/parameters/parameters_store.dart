@@ -29,7 +29,7 @@ class ParametersStore {
   );
 
   final springConstant = ParameterStore(
-    bounds: const (min: 0, max: 20),
+    bounds: const (min: 0, max: 50),
     initialValue: 5,
   );
 
