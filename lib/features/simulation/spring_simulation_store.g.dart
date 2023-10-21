@@ -35,6 +35,42 @@ mixin _$SpringSimulationStore on _SpringSimulationStoreBase, Store {
     });
   }
 
+  late final _$_trajectoryBoundsAtom = Atom(
+      name: '_SpringSimulationStoreBase._trajectoryBounds', context: context);
+
+  ({double maxX, double maxY}) get trajectoryBounds {
+    _$_trajectoryBoundsAtom.reportRead();
+    return super._trajectoryBounds;
+  }
+
+  @override
+  ({double maxX, double maxY}) get _trajectoryBounds => trajectoryBounds;
+
+  @override
+  set _trajectoryBounds(({double maxX, double maxY}) value) {
+    _$_trajectoryBoundsAtom.reportWrite(value, super._trajectoryBounds, () {
+      super._trajectoryBounds = value;
+    });
+  }
+
+  late final _$_positionBoundsAtom = Atom(
+      name: '_SpringSimulationStoreBase._positionBounds', context: context);
+
+  double get positionBounds {
+    _$_positionBoundsAtom.reportRead();
+    return super._positionBounds;
+  }
+
+  @override
+  double get _positionBounds => positionBounds;
+
+  @override
+  set _positionBounds(double value) {
+    _$_positionBoundsAtom.reportWrite(value, super._positionBounds, () {
+      super._positionBounds = value;
+    });
+  }
+
   late final _$startSimulationAsyncAction = AsyncAction(
       '_SpringSimulationStoreBase.startSimulation',
       context: context);

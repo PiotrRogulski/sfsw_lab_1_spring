@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:isolate';
+import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameters_store.dart';
 import 'package:sfsw_lab_1_spring/features/simulation/observation.dart';
 import 'package:vector_math/vector_math.dart';
@@ -27,21 +30,42 @@ abstract class _SpringSimulationStoreBase with Store {
   @readonly
   var _status = SimulationStatus.idle;
 
+  @readonly
+  var _trajectoryBounds = (maxX: 0.0, maxY: 0.0);
+
+  @readonly
+  var _positionBounds = 0.0;
+
   Isolate? _isolateInstance;
-  StreamSubscription<dynamic>? _isolateToMainStreamSub;
+  StreamSubscription<Observation>? _isolateToMainStreamSub;
+
+  void _reset() {
+    readings.clear();
+    _trajectoryBounds = (maxX: 0, maxY: 0);
+    _positionBounds = 0;
+  }
 
   @action
   Future<void> startSimulation() async {
     _status = SimulationStatus.starting;
-    readings.clear();
+    _reset();
     final isolateToMainPort = ReceivePort();
 
-    _isolateToMainStreamSub = isolateToMainPort.listen((data) {
-      print('Received $data');
-      if (data is Observation) {
+    _isolateToMainStreamSub = isolateToMainPort.whereType<Observation>().listen(
+      (data) {
         readings.add(data);
-      }
-    });
+        _trajectoryBounds = (
+          maxX: max(data.position.abs(), _trajectoryBounds.maxX),
+          maxY: max(data.velocity.abs(), _trajectoryBounds.maxY),
+        );
+        _positionBounds = [
+          _positionBounds,
+          data.position.abs(),
+          data.velocity.abs(),
+          data.acceleration.abs(),
+        ].max;
+      },
+    );
 
     _isolateInstance = await Isolate.spawn(
       _runSimulation,

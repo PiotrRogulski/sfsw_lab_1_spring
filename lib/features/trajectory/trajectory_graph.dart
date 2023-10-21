@@ -1,9 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:sfsw_lab_1_spring/common/hooks/use_observable.dart';
+import 'package:sfsw_lab_1_spring/features/simulation/observation.dart';
 import 'package:sfsw_lab_1_spring/features/simulation/spring_simulation_store.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_slot.dart';
 
@@ -20,8 +19,8 @@ class TrajectoryGraph extends StatelessWidget with LayoutSlot {
         if (constraints.hasBoundedHeight) {
           return const _TrajectoryGraph();
         } else {
-          return const AspectRatio(
-            aspectRatio: 1,
+          return const SizedBox(
+            height: 400,
             child: _TrajectoryGraph(),
           );
         }
@@ -30,22 +29,19 @@ class TrajectoryGraph extends StatelessWidget with LayoutSlot {
   }
 }
 
-class _TrajectoryGraph extends HookWidget {
+class _TrajectoryGraph extends StatelessObserverWidget {
   const _TrajectoryGraph();
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    final data = useObservable(
-      () => context
-          .read<SpringSimulationStore>()
-          .readings
-          .map((o) => (x: o.position, y: o.velocity))
-          .toList(),
-    );
+    final SpringSimulationStore(
+      :readings,
+      trajectoryBounds: (:maxX, :maxY),
+    ) = context.read();
 
-    if (data.isEmpty) {
+    if (readings.isEmpty) {
       return const Placeholder(
         color: Colors.transparent,
         child: Center(
@@ -54,18 +50,15 @@ class _TrajectoryGraph extends HookWidget {
       );
     }
 
-    final maxX = data.map((o) => o.x.abs()).max * 1.1;
-    final maxY = data.map((o) => o.y.abs()).max * 1.1;
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: LineChart(
         duration: Duration.zero,
         LineChartData(
-          maxX: maxX,
-          minX: -maxX,
-          maxY: maxY,
-          minY: -maxY,
+          maxX: maxX * 1.1,
+          minX: -maxX * 1.1,
+          maxY: maxY * 1.1,
+          minY: -maxY * 1.1,
           titlesData: const FlTitlesData(
             bottomTitles: AxisTitles(
               axisNameSize: 24,
@@ -78,7 +71,10 @@ class _TrajectoryGraph extends HookWidget {
           ),
           lineBarsData: [
             LineChartBarData(
-              spots: [for (final (:x, :y) in data) FlSpot(x, y)],
+              spots: [
+                for (final Observation(:position, :velocity) in readings)
+                  FlSpot(position, velocity),
+              ],
               color: colors.primary,
               dotData: const FlDotData(show: false),
             ),
