@@ -21,7 +21,6 @@ class AppTheme {
     ).copyWith(
       splashFactory: InkSparkle.splashFactory,
       cardTheme: CardTheme(
-        clipBehavior: Clip.antiAlias,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
