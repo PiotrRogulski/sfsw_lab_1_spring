@@ -1,15 +1,10 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:sfsw_lab_1_spring/common/widgets/breakpoint_selector.dart';
 import 'package:sfsw_lab_1_spring/design_system/theme.dart';
 import 'package:sfsw_lab_1_spring/features/settings/settings_store.dart';
-import 'package:sfsw_lab_1_spring/features/simulation/spring_simulation_store.dart';
-import 'package:sfsw_lab_1_spring/layouts/layout_large.dart';
-import 'package:sfsw_lab_1_spring/layouts/layout_medium.dart';
-import 'package:sfsw_lab_1_spring/layouts/layout_small.dart';
+import 'package:sfsw_lab_1_spring/home.dart';
 import 'package:sfsw_lab_1_spring/providers.dart';
 
 class App extends StatelessWidget {
@@ -31,7 +26,6 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.read<SettingsStore>();
-    final simulation = context.read<SpringSimulationStore>();
 
     return DynamicColorBuilder(
       builder: (lightScheme, darkScheme) {
@@ -42,80 +36,11 @@ class _App extends StatelessWidget {
               theme: AppTheme.light(lightScheme),
               darkTheme: AppTheme.dark(darkScheme),
               themeMode: settings.themeMode,
-              home: Scaffold(
-                appBar: AppBar(
-                  elevation: 3,
-                  title: Row(
-                    children: [
-                      IconButton.filledTonal(
-                        onPressed: simulation.status == SimulationStatus.running
-                            ? null
-                            : simulation.startSimulation,
-                        icon: const Icon(Icons.play_arrow),
-                      ),
-                      IconButton(
-                        onPressed: simulation.status == SimulationStatus.running
-                            ? simulation.stopSimulation
-                            : null,
-                        icon: const Icon(Icons.stop),
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        settings.themeMode =
-                            settings.themeMode == ThemeMode.light
-                                ? ThemeMode.dark
-                                : ThemeMode.light;
-                      },
-                      icon: Icon(
-                        settings.themeMode == ThemeMode.light
-                            ? Icons.dark_mode
-                            : Icons.light_mode,
-                      ),
-                    ),
-                  ],
-                ),
-                body: BreakpointSelector(
-                  builders: {
-                    AppBreakpoint.large: (context) => const LayoutLarge(
-                          key: PageStorageKey('layout_large'),
-                        ),
-                    AppBreakpoint.medium: (context) => const LayoutMedium(
-                          key: PageStorageKey('layout_medium'),
-                        ),
-                    AppBreakpoint.small: (context) => const LayoutSmall(
-                          key: PageStorageKey('layout_small'),
-                        ),
-                  },
-                ),
-              ),
+              home: const Home(),
             );
           },
         );
       },
     );
-  }
-}
-
-enum AppBreakpoint implements Breakpoint {
-  small(end: 700),
-  medium(begin: 700, end: 1200),
-  large(begin: 1200);
-
-  const AppBreakpoint({
-    this.begin = double.negativeInfinity,
-    this.end = double.infinity,
-  });
-
-  final double begin;
-  final double end;
-
-  @override
-  bool isActive(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-
-    return width >= begin && width < end;
   }
 }

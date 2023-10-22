@@ -12,8 +12,10 @@ class LayoutLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeArea = MediaQuery.paddingOf(context).copyWith(top: 0);
+
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16) + safeArea,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

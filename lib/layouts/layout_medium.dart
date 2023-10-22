@@ -12,12 +12,14 @@ class LayoutMedium extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeArea = MediaQuery.paddingOf(context).copyWith(top: 0);
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: SizedBox(
+        Padding(
+          padding: const EdgeInsets.all(16) + safeArea.copyWith(right: 0),
+          child: const SizedBox(
             width: 250,
             child: SlotDecoration(child: ParametersForm()),
           ),
@@ -25,10 +27,11 @@ class LayoutMedium extends StatelessWidget {
         Expanded(
           child: ListView(
             padding: const EdgeInsets.only(
-              right: 16,
-              top: 16,
-              bottom: 16,
-            ),
+                  right: 16,
+                  top: 16,
+                  bottom: 16,
+                ) +
+                safeArea.copyWith(left: 0),
             // TODO: adjust children sizes
             children: const [
               SlotDecoration(child: SpringVisualization()),

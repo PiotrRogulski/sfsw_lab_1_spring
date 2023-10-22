@@ -14,8 +14,10 @@ class LayoutSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeArea = MediaQuery.paddingOf(context).copyWith(top: 0);
+
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16) + safeArea,
       // TODO: adjust children sizes
       children: const [
         SlotDecoration(child: SpringVisualization()),

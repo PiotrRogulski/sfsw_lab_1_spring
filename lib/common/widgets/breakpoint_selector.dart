@@ -20,3 +20,24 @@ class BreakpointSelector extends StatelessWidget {
     return builder(context);
   }
 }
+
+enum AppBreakpoint implements Breakpoint {
+  small(end: 700),
+  medium(begin: 700, end: 1200),
+  large(begin: 1200);
+
+  const AppBreakpoint({
+    this.begin = double.negativeInfinity,
+    this.end = double.infinity,
+  });
+
+  final double begin;
+  final double end;
+
+  @override
+  bool isActive(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+
+    return width >= begin && width < end;
+  }
+}
