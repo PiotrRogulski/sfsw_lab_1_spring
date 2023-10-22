@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:sfsw_lab_1_spring/features/simulation/observation.dart';
 import 'package:sfsw_lab_1_spring/features/simulation/spring_simulation_store.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_slot.dart';
 
@@ -48,6 +47,9 @@ class _PositionGraph extends StatelessObserverWidget {
     final SpringSimulationStore(
       :readings,
       :positionBounds,
+      :positionPoints,
+      :velocityPoints,
+      :accelerationPoints,
     ) = context.read();
 
     if (readings.isEmpty) {
@@ -75,28 +77,18 @@ class _PositionGraph extends StatelessObserverWidget {
                 minY: -positionBounds * 1.1,
                 lineBarsData: [
                   LineChartBarData(
-                    spots: [
-                      for (final Observation(:timestamp, :position) in readings)
-                        FlSpot(timestamp.inMicroseconds / 1e6, position),
-                    ],
+                    spots: positionPoints,
                     color: colors.primary,
                     dotData: const FlDotData(show: false),
                   ),
                   LineChartBarData(
-                    spots: [
-                      for (final Observation(:timestamp, :velocity) in readings)
-                        FlSpot(timestamp.inMicroseconds / 1e6, velocity),
-                    ],
+                    spots: velocityPoints,
                     color: colors.secondary,
                     dotData: const FlDotData(show: false),
                     dashArray: [10, 2],
                   ),
                   LineChartBarData(
-                    spots: [
-                      for (final Observation(:timestamp, :acceleration)
-                          in readings)
-                        FlSpot(timestamp.inMicroseconds / 1e6, acceleration),
-                    ],
+                    spots: accelerationPoints,
                     color: colors.tertiary,
                     dotData: const FlDotData(show: false),
                     dashArray: [4, 2],

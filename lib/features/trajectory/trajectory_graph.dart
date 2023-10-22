@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:sfsw_lab_1_spring/features/simulation/observation.dart';
 import 'package:sfsw_lab_1_spring/features/simulation/spring_simulation_store.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_slot.dart';
 
@@ -39,6 +38,7 @@ class _TrajectoryGraph extends StatelessObserverWidget {
     final SpringSimulationStore(
       :readings,
       trajectoryBounds: (:maxX, :maxY),
+      :trajectoryPoints,
     ) = context.read();
 
     if (readings.isEmpty) {
@@ -71,10 +71,7 @@ class _TrajectoryGraph extends StatelessObserverWidget {
           ),
           lineBarsData: [
             LineChartBarData(
-              spots: [
-                for (final Observation(:position, :velocity) in readings)
-                  FlSpot(position, velocity),
-              ],
+              spots: trajectoryPoints,
               color: colors.primary,
               dotData: const FlDotData(show: false),
             ),

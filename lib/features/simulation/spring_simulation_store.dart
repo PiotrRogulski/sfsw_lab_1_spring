@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:mobx/mobx.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameters_store.dart';
@@ -24,6 +25,11 @@ abstract class _SpringSimulationStoreBase with Store {
 
   final readings = ObservableList<Observation>();
 
+  final positionPoints = ObservableList<FlSpot>();
+  final velocityPoints = ObservableList<FlSpot>();
+  final accelerationPoints = ObservableList<FlSpot>();
+  final trajectoryPoints = ObservableList<FlSpot>();
+
   @computed
   Observation? get latestReading => readings.lastOrNull;
 
@@ -41,6 +47,10 @@ abstract class _SpringSimulationStoreBase with Store {
 
   void _reset() {
     readings.clear();
+    positionPoints.clear();
+    velocityPoints.clear();
+    accelerationPoints.clear();
+    trajectoryPoints.clear();
     _trajectoryBounds = (maxX: 0, maxY: 0);
     _positionBounds = 0;
   }
@@ -54,6 +64,30 @@ abstract class _SpringSimulationStoreBase with Store {
     _isolateToMainStreamSub = isolateToMainPort.whereType<Observation>().listen(
       (data) {
         readings.add(data);
+        positionPoints.add(
+          FlSpot(
+            data.timestamp.inMicroseconds / Duration.microsecondsPerSecond,
+            data.position,
+          ),
+        );
+        velocityPoints.add(
+          FlSpot(
+            data.timestamp.inMicroseconds / Duration.microsecondsPerSecond,
+            data.velocity,
+          ),
+        );
+        accelerationPoints.add(
+          FlSpot(
+            data.timestamp.inMicroseconds / Duration.microsecondsPerSecond,
+            data.acceleration,
+          ),
+        );
+        trajectoryPoints.add(
+          FlSpot(
+            data.position,
+            data.velocity,
+          ),
+        );
         _trajectoryBounds = (
           maxX: max(data.position.abs(), _trajectoryBounds.maxX),
           maxY: max(data.velocity.abs(), _trajectoryBounds.maxY),
