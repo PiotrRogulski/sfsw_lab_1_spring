@@ -26,6 +26,7 @@ class LayoutMedium extends StatelessWidget {
         ),
         Expanded(
           child: ListView(
+            clipBehavior: Clip.none,
             padding: const EdgeInsets.only(
                   right: 16,
                   top: 16,
