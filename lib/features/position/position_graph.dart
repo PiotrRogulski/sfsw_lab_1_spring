@@ -16,12 +16,17 @@ class PositionGraph extends StatelessWidget with LayoutSlot {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final narrow = constraints.maxWidth < 400;
+
         if (constraints.hasBoundedHeight) {
-          return const _PositionGraph();
+          return _PositionGraph(narrow: narrow);
         } else {
-          return const SizedBox(
-            height: 200,
-            child: _PositionGraph(),
+          return SizedBox(
+            height: switch (narrow) {
+              true => 400,
+              false => 200,
+            },
+            child: _PositionGraph(narrow: narrow),
           );
         }
       },
@@ -30,7 +35,11 @@ class PositionGraph extends StatelessWidget with LayoutSlot {
 }
 
 class _PositionGraph extends StatelessObserverWidget {
-  const _PositionGraph();
+  const _PositionGraph({
+    required this.narrow,
+  });
+
+  final bool narrow;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +61,11 @@ class _PositionGraph extends StatelessObserverWidget {
 
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Row(
+      child: Flex(
+        direction: switch (narrow) {
+          true => Axis.vertical,
+          false => Axis.horizontal,
+        },
         children: [
           Expanded(
             child: LineChart(
