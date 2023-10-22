@@ -1,5 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:sfsw_lab_1_spring/design_system/theme.dart';
@@ -37,6 +38,10 @@ class _App extends StatelessWidget {
               darkTheme: AppTheme.dark(darkScheme),
               themeMode: settings.themeMode,
               home: const Home(),
+              shortcuts: const {
+                SingleActivator(LogicalKeyboardKey.keyQ, control: true):
+                    VoidCallbackIntent(SystemNavigator.pop),
+              },
             );
           },
         );
