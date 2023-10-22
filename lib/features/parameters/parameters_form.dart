@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 import 'package:sfsw_lab_1_spring/common/hooks/use_observable.dart';
 import 'package:sfsw_lab_1_spring/common/hooks/use_reaction.dart';
+import 'package:sfsw_lab_1_spring/common/widgets/conditional_wrapper.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameter_store.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameters_store.dart';
 import 'package:sfsw_lab_1_spring/features/simulation/spring_simulation_store.dart';
@@ -22,7 +23,13 @@ class ParametersForm extends HookWidget with LayoutSlot {
 
     final reading = useObservable(() => simulation.latestReading);
 
-    return SingleChildScrollView(
+    final parentScrollable = Scrollable.maybeOf(context);
+
+    return ConditionalWrapper(
+      enabled: parentScrollable == null,
+      wrapper: (child) => SingleChildScrollView(
+        child: child,
+      ),
       child: Column(
         children: [
           _ParameterEntry(
