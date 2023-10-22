@@ -71,6 +71,24 @@ mixin _$SpringSimulationStore on _SpringSimulationStoreBase, Store {
     });
   }
 
+  late final _$_forcesBoundsAtom =
+      Atom(name: '_SpringSimulationStoreBase._forcesBounds', context: context);
+
+  double get forcesBounds {
+    _$_forcesBoundsAtom.reportRead();
+    return super._forcesBounds;
+  }
+
+  @override
+  double get _forcesBounds => forcesBounds;
+
+  @override
+  set _forcesBounds(double value) {
+    _$_forcesBoundsAtom.reportWrite(value, super._forcesBounds, () {
+      super._forcesBounds = value;
+    });
+  }
+
   late final _$startSimulationAsyncAction = AsyncAction(
       '_SpringSimulationStoreBase.startSimulation',
       context: context);

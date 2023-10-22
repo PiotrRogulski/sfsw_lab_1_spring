@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:sfsw_lab_1_spring/common/widgets/chart_legend.dart';
 import 'package:sfsw_lab_1_spring/features/simulation/spring_simulation_store.dart';
 import 'package:sfsw_lab_1_spring/layouts/layout_slot.dart';
 
@@ -132,119 +133,26 @@ class _PositionGraph extends StatelessObserverWidget {
               ),
             ),
           ),
-          const _Legend(),
-        ],
-      ),
-    );
-  }
-}
-
-class _LegendEntry extends StatelessWidget {
-  const _LegendEntry({
-    required this.color,
-    required this.label,
-    this.dashArray,
-  });
-
-  final Color color;
-  final String label;
-  final List<double>? dashArray;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 24,
-            height: 8,
-            child: CustomPaint(
-              painter: _LinePreviewPainter(
-                color: color,
-                dashArray: dashArray,
+          ChartLegend(
+            entries: [
+              LegendEntry(
+                color: colors.primary,
+                label: 'Position',
               ),
-            ),
+              LegendEntry(
+                color: colors.secondary,
+                label: 'Velocity',
+                dashArray: const [10, 2],
+              ),
+              LegendEntry(
+                color: colors.tertiary,
+                label: 'Acceleration',
+                dashArray: const [4, 2],
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
-          Text(label),
         ],
       ),
-    );
-  }
-}
-
-class _LinePreviewPainter extends CustomPainter {
-  _LinePreviewPainter({
-    required this.color,
-    this.dashArray,
-  });
-
-  final Color color;
-  final List<double>? dashArray;
-
-  late final dashPaint = Paint()
-    ..color = color
-    ..strokeWidth = 2
-    ..style = PaintingStyle.fill
-    ..isAntiAlias = false;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final middle = size.height / 2;
-
-    if (dashArray case [final onPixels, final offPixels]) {
-      var x = 0.0;
-      while (x < size.width) {
-        canvas.drawLine(
-          Offset(x, middle),
-          Offset(x + onPixels, middle),
-          dashPaint,
-        );
-        x += onPixels + offPixels;
-      }
-    } else {
-      canvas.drawLine(
-        Offset(0, middle),
-        Offset(size.width, middle),
-        dashPaint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_LinePreviewPainter oldDelegate) =>
-      oldDelegate.color != color ||
-      oldDelegate.dashArray?.firstOrNull != dashArray?.firstOrNull ||
-      oldDelegate.dashArray?.lastOrNull != dashArray?.lastOrNull;
-}
-
-class _Legend extends StatelessWidget {
-  const _Legend();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _LegendEntry(
-          color: colors.primary,
-          label: 'Position',
-        ),
-        _LegendEntry(
-          color: colors.secondary,
-          label: 'Velocity',
-          dashArray: const [10, 2],
-        ),
-        _LegendEntry(
-          color: colors.tertiary,
-          label: 'Acceleration',
-          dashArray: const [4, 2],
-        ),
-      ],
     );
   }
 }

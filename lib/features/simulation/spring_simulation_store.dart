@@ -16,6 +16,8 @@ part 'spring_simulation_store.g.dart';
 class SpringSimulationStore = _SpringSimulationStoreBase
     with _$SpringSimulationStore;
 
+enum SimulationStatus { idle, starting, running, paused }
+
 abstract class _SpringSimulationStoreBase with Store {
   _SpringSimulationStoreBase({
     required this.parametersStore,
@@ -29,6 +31,9 @@ abstract class _SpringSimulationStoreBase with Store {
   final velocityPoints = ObservableList<FlSpot>();
   final accelerationPoints = ObservableList<FlSpot>();
   final trajectoryPoints = ObservableList<FlSpot>();
+  final springForcePoints = ObservableList<FlSpot>();
+  final dampingForcePoints = ObservableList<FlSpot>();
+  final externalForcePoints = ObservableList<FlSpot>();
 
   @computed
   Observation? get latestReading => readings.lastOrNull;
@@ -42,15 +47,25 @@ abstract class _SpringSimulationStoreBase with Store {
   @readonly
   var _positionBounds = 0.0;
 
+  @readonly
+  var _forcesBounds = 0.0;
+
   Isolate? _isolateInstance;
   StreamSubscription<Observation>? _isolateToMainStreamSub;
 
   void _reset() {
-    readings.clear();
-    positionPoints.clear();
-    velocityPoints.clear();
-    accelerationPoints.clear();
-    trajectoryPoints.clear();
+    for (final list in [
+      readings,
+      positionPoints,
+      velocityPoints,
+      accelerationPoints,
+      trajectoryPoints,
+      springForcePoints,
+      dampingForcePoints,
+      externalForcePoints,
+    ]) {
+      list.clear();
+    }
     _trajectoryBounds = (maxX: 0, maxY: 0);
     _positionBounds = 0;
   }
@@ -64,30 +79,18 @@ abstract class _SpringSimulationStoreBase with Store {
     _isolateToMainStreamSub = isolateToMainPort.whereType<Observation>().listen(
       (data) {
         readings.add(data);
-        positionPoints.add(
-          FlSpot(
-            data.timestamp.inMicroseconds / Duration.microsecondsPerSecond,
-            data.position,
-          ),
-        );
-        velocityPoints.add(
-          FlSpot(
-            data.timestamp.inMicroseconds / Duration.microsecondsPerSecond,
-            data.velocity,
-          ),
-        );
-        accelerationPoints.add(
-          FlSpot(
-            data.timestamp.inMicroseconds / Duration.microsecondsPerSecond,
-            data.acceleration,
-          ),
-        );
-        trajectoryPoints.add(
-          FlSpot(
-            data.position,
-            data.velocity,
-          ),
-        );
+
+        final t =
+            data.timestamp.inMicroseconds / Duration.microsecondsPerSecond;
+
+        positionPoints.add(FlSpot(t, data.position));
+        velocityPoints.add(FlSpot(t, data.velocity));
+        accelerationPoints.add(FlSpot(t, data.acceleration));
+        trajectoryPoints.add(FlSpot(data.position, data.velocity));
+        springForcePoints.add(FlSpot(t, data.springForce));
+        dampingForcePoints.add(FlSpot(t, data.dampingForce));
+        externalForcePoints.add(FlSpot(t, data.externalForce));
+
         _trajectoryBounds = (
           maxX: max(data.position.abs(), _trajectoryBounds.maxX),
           maxY: max(data.velocity.abs(), _trajectoryBounds.maxY),
@@ -97,6 +100,12 @@ abstract class _SpringSimulationStoreBase with Store {
           data.position.abs(),
           data.velocity.abs(),
           data.acceleration.abs(),
+        ].max;
+        _forcesBounds = [
+          _forcesBounds,
+          data.springForce.abs(),
+          data.dampingForce.abs(),
+          data.externalForce.abs(),
         ].max;
       },
     );
@@ -119,5 +128,3 @@ abstract class _SpringSimulationStoreBase with Store {
     _status = SimulationStatus.idle;
   }
 }
-
-enum SimulationStatus { idle, starting, running, paused }
