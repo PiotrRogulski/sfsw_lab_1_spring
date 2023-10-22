@@ -16,7 +16,7 @@ class ForcesGraph extends StatelessWidget with LayoutSlot {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final narrow = constraints.maxWidth < 400;
+        final narrow = constraints.maxWidth < 350;
 
         if (constraints.hasBoundedHeight) {
           return _ForcesGraph(narrow: narrow);
