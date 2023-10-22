@@ -34,26 +34,32 @@ class ParametersForm extends HookWidget with LayoutSlot {
         children: [
           _ParameterEntry(
             label: 'x₀',
+            description: 'Initial position',
             parameter: parameters.initialPosition,
           ),
           _ParameterEntry(
             label: 'v₀',
+            description: 'Initial velocity',
             parameter: parameters.initialVelocity,
           ),
           _ParameterEntry(
             label: 'Δt',
+            description: 'Simulation time delta',
             parameter: parameters.timeDelta,
           ),
           _ParameterEntry(
             label: 'm',
+            description: 'Mass',
             parameter: parameters.mass,
           ),
           _ParameterEntry(
             label: 'k',
+            description: 'Damping constant',
             parameter: parameters.dampingConstant,
           ),
           _ParameterEntry(
             label: 'c',
+            description: 'Spring constant',
             parameter: parameters.springConstant,
           ),
           if (reading != null)
@@ -72,14 +78,19 @@ class ParametersForm extends HookWidget with LayoutSlot {
 class _ParameterEntry extends HookWidget {
   const _ParameterEntry({
     required this.label,
+    required this.description,
     required this.parameter,
   });
 
   final String label;
+  final String description;
   final ParameterStore parameter;
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
+
     final ParameterStore(:precision, :bounds) = parameter;
 
     final controller = useTextEditingController(
@@ -116,10 +127,24 @@ class _ParameterEntry extends HookWidget {
         const SizedBox(width: 8),
         SizedBox(
           width: 32,
-          child: Text(
-            label,
-            textAlign: TextAlign.end,
-            style: Theme.of(context).textTheme.labelLarge,
+          child: MouseRegion(
+            cursor: SystemMouseCursors.help,
+            child: Tooltip(
+              preferBelow: false,
+              message: description,
+              textStyle: textStyles.bodySmall?.copyWith(
+                color: colors.onInverseSurface,
+              ),
+              decoration: BoxDecoration(
+                color: colors.inverseSurface,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                label,
+                textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 4),
