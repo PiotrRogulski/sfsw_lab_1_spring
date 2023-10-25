@@ -68,6 +68,7 @@ abstract class _SpringSimulationStoreBase with Store {
     }
     _trajectoryBounds = (maxX: 0, maxY: 0);
     _positionBounds = 0;
+    _forcesBounds = 0;
   }
 
   @action

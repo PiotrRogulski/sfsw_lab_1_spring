@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sfsw_lab_1_spring/common/hooks/use_observable.dart';
 import 'package:sfsw_lab_1_spring/common/hooks/use_reaction.dart';
 import 'package:sfsw_lab_1_spring/common/widgets/conditional_wrapper.dart';
+import 'package:sfsw_lab_1_spring/features/parameters/functional_parameter_button.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameter_store.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameters_store.dart';
 import 'package:sfsw_lab_1_spring/features/simulation/observation.dart';
@@ -26,6 +27,9 @@ class ParametersForm extends HookWidget with LayoutSlot {
     final simulation = context.read<SpringSimulationStore>();
 
     final reading = useObservable(() => simulation.latestReading);
+
+    final externalForce = useObservable(() => parameters.externalForce);
+    final originPosition = useObservable(() => parameters.originPosition);
 
     final parentScrollable = Scrollable.maybeOf(context);
 
@@ -65,6 +69,16 @@ class ParametersForm extends HookWidget with LayoutSlot {
             label: 'c',
             description: 'Spring constant',
             parameter: parameters.springConstant,
+          ),
+          FunctionalParameterButton(
+            label: 'External force',
+            parameterValue: externalForce,
+            parameterSetter: (value) => parameters.externalForce = value,
+          ),
+          FunctionalParameterButton(
+            label: 'Origin position',
+            parameterValue: originPosition,
+            parameterSetter: (value) => parameters.originPosition = value,
           ),
           if (reading != null)
             _LatestReading(
