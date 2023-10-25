@@ -1,7 +1,13 @@
 import 'package:meta/meta.dart';
+import 'package:mobx/mobx.dart';
+import 'package:sfsw_lab_1_spring/features/parameters/functional_parameter.dart';
 import 'package:sfsw_lab_1_spring/features/parameters/parameter_store.dart';
 
-class ParametersStore {
+part 'parameters_store.g.dart';
+
+class ParametersStore = _ParametersStoreBase with _$ParametersStore;
+
+abstract class _ParametersStoreBase with Store {
   final initialPosition = ParameterStore(
     bounds: const (min: -10, max: 10),
     initialValue: 0,
@@ -33,6 +39,12 @@ class ParametersStore {
     initialValue: 5,
   );
 
+  @observable
+  FunctionalParameter externalForce = const ConstantParameter(0);
+
+  @observable
+  FunctionalParameter originPosition = const ConstantParameter(0);
+
   Parameters get values => Parameters(
         initialPosition: initialPosition.value,
         initialVelocity: initialVelocity.value,
@@ -40,10 +52,8 @@ class ParametersStore {
         mass: mass.value,
         dampingConstant: dampingConstant.value,
         springConstant: springConstant.value,
-        // TODO: allow external force to be set
-        externalForce: (t) => 0,
-        // TODO: allow origin position to be set
-        originPosition: (t) => 0,
+        externalForce: externalForce,
+        originPosition: originPosition,
       );
 }
 
