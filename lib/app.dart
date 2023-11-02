@@ -1,4 +1,3 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -21,30 +20,22 @@ class App extends StatelessWidget {
   }
 }
 
-class _App extends StatelessWidget {
+class _App extends StatelessObserverWidget {
   const _App();
 
   @override
   Widget build(BuildContext context) {
     final settings = context.read<SettingsStore>();
 
-    return DynamicColorBuilder(
-      builder: (lightScheme, darkScheme) {
-        return Observer(
-          builder: (context) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: AppTheme.light(lightScheme),
-              darkTheme: AppTheme.dark(darkScheme),
-              themeMode: settings.themeMode,
-              home: const Home(),
-              shortcuts: const {
-                SingleActivator(LogicalKeyboardKey.keyQ, control: true):
-                    VoidCallbackIntent(SystemNavigator.pop),
-              },
-            );
-          },
-        );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: settings.themeMode,
+      home: const Home(),
+      shortcuts: const {
+        SingleActivator(LogicalKeyboardKey.keyQ, control: true):
+            VoidCallbackIntent(SystemNavigator.pop),
       },
     );
   }

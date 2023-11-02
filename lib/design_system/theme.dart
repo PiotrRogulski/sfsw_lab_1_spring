@@ -5,16 +5,11 @@ import 'package:material_color_utilities/material_color_utilities.dart';
 const _seedColor = Color(0xFF00FF8C);
 
 class AppTheme {
-  static ThemeData light(ColorScheme? systemScheme) =>
-      _makeTheme(Brightness.light, systemScheme);
-  static ThemeData dark(ColorScheme? systemScheme) =>
-      _makeTheme(Brightness.dark, systemScheme);
+  static ThemeData get light => _makeTheme(Brightness.light);
+  static ThemeData get dark => _makeTheme(Brightness.dark);
 
-  static ThemeData _makeTheme(
-    Brightness brightness,
-    ColorScheme? systemScheme,
-  ) {
-    final colorScheme = systemScheme ?? _makeColorScheme(brightness);
+  static ThemeData _makeTheme(Brightness brightness) {
+    final colorScheme = _makeColorScheme(brightness);
     return ThemeData.from(
       colorScheme: colorScheme,
       useMaterial3: true,
@@ -44,7 +39,7 @@ class AppTheme {
   }
 
   static ColorScheme _makeColorScheme(Brightness brightness) {
-    final scheme = SchemeFidelity(
+    final scheme = SchemeExpressive(
       sourceColorHct: Hct.fromInt(_seedColor.value),
       isDark: brightness == Brightness.dark,
       contrastLevel: 1,
