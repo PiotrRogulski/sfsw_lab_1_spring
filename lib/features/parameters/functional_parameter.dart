@@ -149,8 +149,11 @@ class StepParameter extends FunctionalParameter {
   }
 
   @override
-  String get _formula =>
-      '{t < ${_fmt(changeTime)} ⇒ 0, t >= ${_fmt(changeTime)} ⇒ ${_fmt(amplitude)}}';
+  String get _formula => '''
+{
+    t < ${_fmt(changeTime)} ⇒ 0,
+    t >= ${_fmt(changeTime)} ⇒ ${_fmt(amplitude)},
+}''';
 
   @override
   Map<String, double> get variableValues => {'A': amplitude, 't0': changeTime};
