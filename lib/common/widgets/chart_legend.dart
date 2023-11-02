@@ -73,15 +73,19 @@ class _LinePreviewPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final middle = size.height / 2;
 
-    if (dashArray case [final onPixels, final offPixels]) {
+    if (dashArray case final dashArray?) {
       var x = 0.0;
+      var i = 0;
       while (x < size.width) {
-        canvas.drawLine(
-          Offset(x, middle),
-          Offset(x + onPixels, middle),
-          dashPaint,
-        );
-        x += onPixels + offPixels;
+        if (i.isEven) {
+          canvas.drawLine(
+            Offset(x, middle),
+            Offset(x + dashArray[i], middle),
+            dashPaint,
+          );
+        }
+        x += dashArray[i];
+        i = (i + 1) % dashArray.length;
       }
     } else {
       canvas.drawLine(
