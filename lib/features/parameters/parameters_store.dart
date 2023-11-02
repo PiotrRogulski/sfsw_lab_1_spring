@@ -25,7 +25,7 @@ abstract class _ParametersStoreBase with Store {
   );
 
   final mass = ParameterStore(
-    bounds: const (min: 0.1, max: 20),
+    bounds: const (min: 0.01, max: 10),
     initialValue: 1,
   );
 
