@@ -116,7 +116,7 @@ class CreateFunctionDialog<T extends FunctionalParameter> extends HookWidget {
               Navigator.of(context).pop(values);
             }
           },
-          child: const Text('Create'),
+          child: const Text('OK'),
         ),
       ],
     );
