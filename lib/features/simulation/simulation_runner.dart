@@ -22,16 +22,21 @@ Future<void> _runSimulation((SendPort, Parameters) args) async {
   double dampingForce(double t) => -dampingConstant * y[1];
   double totalForce(double t) =>
       springForce(t) + dampingForce(t) + externalForce(t);
-  double acceleration(double t) => totalForce(t) / mass;
+
+  final oneOverMass = 1 / mass;
+  double acceleration(double t) => totalForce(t) * oneOverMass;
+
+  const secondsPerMicrosecond = 1 / Duration.microsecondsPerSecond;
+  const millisecondsPerMicrosecond = 1 / Duration.microsecondsPerMillisecond;
 
   final beginningTime = DateTime.now();
   var lastTimestamp = beginningTime;
   Timer.periodic(Duration(milliseconds: timeDelta * 1000 ~/ 1), (_) {
     final now = DateTime.now();
     final timestamp = now.difference(beginningTime);
-    final t = timestamp.inMicroseconds / Duration.microsecondsPerMillisecond;
-    final dt = now.difference(lastTimestamp).inMicroseconds /
-        Duration.microsecondsPerSecond;
+    final t = timestamp.inMicroseconds * millisecondsPerMicrosecond;
+    final dt =
+        now.difference(lastTimestamp).inMicroseconds * secondsPerMicrosecond;
 
     final currAcceleration = acceleration(t);
 
