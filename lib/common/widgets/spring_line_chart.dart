@@ -10,6 +10,7 @@ class SpringLineChart extends StatelessWidget {
     required this.firstDataSeries,
     required this.secondDataSeries,
     required this.thirdDataSeries,
+    this.fourthDataSeries,
   });
 
   final bool narrow;
@@ -17,6 +18,7 @@ class SpringLineChart extends StatelessWidget {
   final ({String label, List<FlSpot> data}) firstDataSeries;
   final ({String label, List<FlSpot> data}) secondDataSeries;
   final ({String label, List<FlSpot> data}) thirdDataSeries;
+  final ({String label, List<FlSpot> data})? fourthDataSeries;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,13 @@ class SpringLineChart extends StatelessWidget {
                     dotData: const FlDotData(show: false),
                     dashArray: [4, 2],
                   ),
+                  if (fourthDataSeries != null)
+                    LineChartBarData(
+                      spots: fourthDataSeries!.data,
+                      color: colors.error,
+                      dotData: const FlDotData(show: false),
+                      dashArray: [4, 2, 2, 2],
+                    ),
                 ],
                 lineTouchData: LineTouchData(
                   getTouchedSpotIndicator: (data, indices) => List.filled(
@@ -70,7 +79,7 @@ class SpringLineChart extends StatelessWidget {
                     ),
                     tooltipRoundedRadius: 8,
                     maxContentWidth: 140,
-                    showOnTopOfTheChartBoxArea: true,
+                    // showOnTopOfTheChartBoxArea: true,
                     getTooltipItems: (spots) => [
                       LineTooltipItem(
                         '${firstDataSeries.label}: ${spots.firstWhere((s) => s.barIndex == 0).y.toStringAsFixed(2)}',
@@ -84,6 +93,11 @@ class SpringLineChart extends StatelessWidget {
                         '${thirdDataSeries.label}: ${spots.firstWhere((s) => s.barIndex == 2).y.toStringAsFixed(2)}',
                         TextStyle(color: colors.tertiary),
                       ),
+                      if (fourthDataSeries != null)
+                        LineTooltipItem(
+                          '${fourthDataSeries!.label}: ${spots.firstWhere((s) => s.barIndex == 3).y.toStringAsFixed(2)}',
+                          TextStyle(color: colors.error),
+                        ),
                     ],
                   ),
                 ),
@@ -109,6 +123,12 @@ class SpringLineChart extends StatelessWidget {
                 label: thirdDataSeries.label,
                 dashArray: const [4, 2],
               ),
+              if (fourthDataSeries case final series?)
+                LegendEntry(
+                  color: colors.error,
+                  label: series.label,
+                  dashArray: const [4, 2, 2, 2],
+                ),
             ],
           ),
         ],

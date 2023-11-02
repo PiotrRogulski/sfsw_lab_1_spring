@@ -48,6 +48,7 @@ class _ForcesGraph extends StatelessObserverWidget {
       :springForcePoints,
       :dampingForcePoints,
       :externalForcePoints,
+      :originPoints,
     ) = context.read();
 
     if (readings.isEmpty) {
@@ -73,6 +74,10 @@ class _ForcesGraph extends StatelessObserverWidget {
       thirdDataSeries: (
         label: 'External',
         data: externalForcePoints,
+      ),
+      fourthDataSeries: (
+        label: 'Origin',
+        data: originPoints,
       ),
     );
   }

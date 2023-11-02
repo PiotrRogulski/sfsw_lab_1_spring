@@ -34,6 +34,7 @@ abstract class _SpringSimulationStoreBase with Store {
   final springForcePoints = ObservableList<FlSpot>();
   final dampingForcePoints = ObservableList<FlSpot>();
   final externalForcePoints = ObservableList<FlSpot>();
+  final originPoints = ObservableList<FlSpot>();
 
   @computed
   Observation? get latestReading => readings.lastOrNull;
@@ -63,6 +64,7 @@ abstract class _SpringSimulationStoreBase with Store {
       springForcePoints,
       dampingForcePoints,
       externalForcePoints,
+      originPoints,
     ]) {
       list.clear();
     }
@@ -91,6 +93,7 @@ abstract class _SpringSimulationStoreBase with Store {
         springForcePoints.add(FlSpot(t, data.springForce));
         dampingForcePoints.add(FlSpot(t, data.dampingForce));
         externalForcePoints.add(FlSpot(t, data.externalForce));
+        originPoints.add(FlSpot(t, data.origin));
 
         _trajectoryBounds = (
           maxX: max(data.position.abs(), _trajectoryBounds.maxX),
