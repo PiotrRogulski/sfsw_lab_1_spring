@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:equatable/equatable.dart';
 
-String _fmt(double value) => value.toStringAsFixed(2);
+String _fmt(double value) => value.toString();
 
 typedef ParameterSetupData<T extends FunctionalParameter> = ({
   String formula,
