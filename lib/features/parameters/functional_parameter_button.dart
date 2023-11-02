@@ -58,6 +58,12 @@ class FunctionalParameterButton extends HookWidget {
                 setupData: SquareWaveParameter.setupData,
                 parameterSetter: parameterSetter,
               ),
+              _FunctionMenuEntry(
+                label: 'Step function',
+                currentValue: parameterValue,
+                setupData: StepParameter.setupData,
+                parameterSetter: parameterSetter,
+              ),
             ],
             child: Padding(
               padding: const EdgeInsets.all(8),

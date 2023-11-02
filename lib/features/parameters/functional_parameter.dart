@@ -123,3 +123,44 @@ class SquareWaveParameter extends FunctionalParameter {
   @override
   List<Object?> get props => [amplitude, frequency, phase];
 }
+
+class StepParameter extends FunctionalParameter {
+  const StepParameter({
+    required this.amplitude,
+    required this.changeTime,
+  });
+
+  StepParameter.fromMap(Map<String, double> params)
+      : this(
+          amplitude: params['A']!,
+          changeTime: params['t0']!,
+        );
+
+  final double amplitude;
+  final double changeTime;
+
+  @override
+  double call(double t) {
+    if (t < changeTime) {
+      return 0;
+    } else {
+      return amplitude;
+    }
+  }
+
+  @override
+  String get _formula =>
+      '{t < ${_fmt(changeTime)} ⇒ 0, t >= ${_fmt(changeTime)} ⇒ ${_fmt(amplitude)}}';
+
+  @override
+  Map<String, double> get variableValues => {'A': amplitude, 't0': changeTime};
+
+  static ParameterSetupData<StepParameter> get setupData => (
+        formula: 'f(t) = {t < t0 ⇒ 0, _ ⇒ A}',
+        variables: const ['A', 't0'],
+        builder: StepParameter.fromMap,
+      );
+
+  @override
+  List<Object?> get props => throw UnimplementedError();
+}
