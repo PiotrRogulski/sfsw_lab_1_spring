@@ -22,15 +22,15 @@ class SpringVisualization extends HookWidget with LayoutSlot {
 
     final (:min, :max) = parametersStore.initialPosition.bounds;
 
-    final minValue = useState(min);
-    final maxValue = useState(max);
+    final minValue = useState(2 * min);
+    final maxValue = useState(2 * max);
 
     useEffect(
       () {
         final position = currentReading?.position;
         if (position == null) {
-          minValue.value = min;
-          maxValue.value = max;
+          minValue.value = 2 * min;
+          maxValue.value = 2 * max;
           return null;
         }
 
@@ -51,12 +51,49 @@ class SpringVisualization extends HookWidget with LayoutSlot {
       child: Center(
         child: switch (currentReading) {
           null => const Text('Spring visualization'),
-          // TODO: nicer spring visualization
-          Observation(:final position) => Slider(
-              min: minValue.value,
-              max: maxValue.value,
-              value: position,
-              onChanged: null,
+          Observation(:final position, :final origin) => Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 64,
+                      child: Text(
+                        'Origin',
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        min: minValue.value,
+                        max: maxValue.value,
+                        value: origin,
+                        onChanged: null,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 64,
+                      child: Text(
+                        'Position',
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        min: minValue.value,
+                        max: maxValue.value,
+                        value: position,
+                        onChanged: null,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
         },
       ),

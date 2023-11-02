@@ -6,6 +6,7 @@ class Observation with EquatableMixin {
   const Observation({
     required this.timestamp,
     required this.position,
+    required this.origin,
     required this.velocity,
     required this.acceleration,
     required this.springForce,
@@ -15,6 +16,7 @@ class Observation with EquatableMixin {
 
   final Duration timestamp;
   final double position;
+  final double origin;
   final double velocity;
   final double acceleration;
   final double springForce;
@@ -25,6 +27,7 @@ class Observation with EquatableMixin {
   List<Object?> get props => [
         timestamp,
         position,
+        origin,
         velocity,
         acceleration,
         springForce,

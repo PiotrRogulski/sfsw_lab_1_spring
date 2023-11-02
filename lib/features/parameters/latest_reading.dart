@@ -36,6 +36,10 @@ class _LatestReading extends StatelessWidget {
             value: reading.position,
           ),
           _ReadingRow(
+            label: 'Origin',
+            value: reading.origin,
+          ),
+          _ReadingRow(
             label: 'Velocity',
             value: reading.velocity,
           ),

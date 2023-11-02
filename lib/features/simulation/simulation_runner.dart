@@ -41,6 +41,7 @@ Future<void> _runSimulation((SendPort, Parameters) args) async {
       Observation(
         timestamp: timestamp,
         position: newY[0],
+        origin: originPosition(t),
         velocity: newY[1],
         acceleration: currAcceleration,
         springForce: springForce(t),
