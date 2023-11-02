@@ -22,6 +22,30 @@ class SpringVisualization extends HookWidget with LayoutSlot {
 
     final (:min, :max) = parametersStore.initialPosition.bounds;
 
+    final minValue = useState(min);
+    final maxValue = useState(max);
+
+    useEffect(
+      () {
+        final position = currentReading?.position;
+        if (position == null) {
+          minValue.value = min;
+          maxValue.value = max;
+          return null;
+        }
+
+        if (position < minValue.value) {
+          minValue.value = position;
+        }
+        if (position > maxValue.value) {
+          maxValue.value = position;
+        }
+
+        return null;
+      },
+      [currentReading?.position],
+    );
+
     return Placeholder(
       color: Colors.transparent,
       child: Center(
@@ -29,8 +53,8 @@ class SpringVisualization extends HookWidget with LayoutSlot {
           null => const Text('Spring visualization'),
           // TODO: nicer spring visualization
           Observation(:final position) => Slider(
-              min: 2 * min,
-              max: 2 * max,
+              min: minValue.value,
+              max: maxValue.value,
               value: position,
               onChanged: null,
             ),
