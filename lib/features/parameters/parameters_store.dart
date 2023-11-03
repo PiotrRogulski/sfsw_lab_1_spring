@@ -25,17 +25,17 @@ abstract class _ParametersStoreBase with Store {
   );
 
   final mass = ParameterStore(
-    bounds: const (min: 0.01, max: 10),
+    bounds: const (min: 0.01, max: 30),
     initialValue: 1,
   );
 
   final dampingConstant = ParameterStore(
-    bounds: const (min: 0, max: 1),
+    bounds: const (min: 0.001, max: 3),
     initialValue: 0.1,
   );
 
   final springConstant = ParameterStore(
-    bounds: const (min: 0, max: 50),
+    bounds: const (min: 0.001, max: 50),
     initialValue: 5,
   );
 
